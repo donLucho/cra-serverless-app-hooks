@@ -1,0 +1,53 @@
+# https://docs.netlify.com/configure-builds/file-based-configuration/#netlify-dev
+
+# dev.port = 8888 is left commented for best results
+# dev.autoLaunch=true is also commented
+# dev.framework="#custom" is default value
+# dev.functions="netlify/functions" is default value
+
+
+[dev]
+  command = "npm run start"
+  # port = 8888 
+  targetPort = 3000
+  # autoLaunch=true
+  framework="create-react-app"
+  functions = "src/lambda"
+  publish = "build" 
+
+
+# build.command is "the command you run to build this file"
+# subsequent to running netlify build, running [netlify dev --dir build] refers to build.functions for lambda f()s
+# build.publish="build" denotes how CRA builds to this folder, thus, Netlify should serve all these files statically
+
+
+[build]
+  command="npm run build"
+  functions = "src/lambda"
+  publish = "build"
+
+
+# functions.directory="src/lambda/" is gratuitous, hence, it is commented
+
+
+[functions]
+  node_bundler="esbuild"
+  # directory = "src/lambda/"
+
+
+[[redirects]]
+  from = "/konichiwa"
+  to = "/.netlify/functions/hello-world"
+  status = 200
+
+[[redirects]]
+  from = "/joke"
+  to = "/.netlify/functions/async-dadjoke"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# more info on configuring this file: https://www.netlify.com/docs/netlify-toml-reference/
